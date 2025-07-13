@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+    <html lang = "en">
+    <head>  
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width,initial-scale=1.0">
+        <title>Bus Ticket Payment Method</title>
+        <link rel="stylesheet" href="style.css">
+    </head>  
+    <body>
+        <div class = "container">
+            <h1>Bus Ticket Payment Method</h1>
+
+            <div class = "input-group">
+                <label for = "start place">Start Place:</label>
+                <input type = "text" id = "start place" placeholder = "e.g.,Galle">
+            </div>
+
+            <div class="input-group">
+                <label for = "end place">End Place:</label>
+                <input type = "text" id = "end place"placeholder = "e.g.,Galle">
+            </div>
+
+            <div class = "display amount">
+                Amount : <span id = "tecket amount">LKR 0.00</span>
+            </div>
+
+            <div class = "payment status" id = "payment status">
+                Awaiting payment...
+            </div>
+
+            <div class = "next customer prompt" id = "next customer prompt">
+                "Who is next customer?"
+            </div>
+
+            <div class=""buttons>
+                <button class ="btn btn pay">Tap card to pay</button>
+                <button class = "btn btn next">Next customer</button>
+            </div>
+        </div>
+    </body>
+    </html>
+</DOCTYPE>
