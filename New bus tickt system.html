@@ -1,42 +1,371 @@
 <!DOCTYPE html>
-    <html lang = "en">
-    <head>  
-        <meta charset = "UTF-8">
-        <meta name = "viewport" content = "width=device-width,initial-scale=1.0">
-        <title>Bus Ticket Payment Method</title>
-        <link rel="stylesheet" href="style.css">
-    </head>  
-    <body>
-        <div class = "container">
-            <h1>Bus Ticket Payment Method</h1>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Ticket Payment</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the background and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fbfa; /* Light mint green background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure it takes full viewport height */
+            margin: 0;
+            padding: 1rem; /* Add some padding for smaller screens */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            overflow: hidden; /* Prevent scrollbars if any content goes out of bounds */
+        }
 
-            <div class = "input-group">
-                <label for = "start place">Start Place:</label>
-                <input type = "text" id = "start place" placeholder = "Enter your start place">
+        /* Basic styling for the container to center it */
+        .container {
+            background-color: #00CCFF; /* Bright blue background for the main card */
+            border-radius: 1.5rem; /* Rounded corners */
+            padding: 2rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            width: 100%;
+            max-width: 500px; /* Increased max width slightly for price list */
+            text-align: center;
+            color: #fff; /* White text for contrast */
+            position: relative; /* For absolute positioning of messages */
+            z-index: 10; /* Ensure container is above background elements */
+        }
+
+        /* Input field specific styles */
+        input[type="text"] {
+            background-color: #fff;
+            color: #333;
+            border: none;
+            border-radius: 0.75rem; /* Rounded corners for inputs */
+            padding: 0.75rem 1rem;
+            width: calc(100% - 2rem); /* Full width minus padding */
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Button specific styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem; /* Rounded corners for buttons */
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Blue button */
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d; /* Grey button */
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-success {
+            background-color: #28a745; /* Green button */
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        /* Hide pages by default */
+        .page {
+            display: none;
+        }
+
+        /* Ensure the active page is displayed */
+        .page.active {
+            display: block;
+        }
+
+        /* Price list table styling */
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            color: #333; /* Darker text for table content */
+            background-color: #fff;
+            border-radius: 0.75rem;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+        }
+
+        .price-table th, .price-table td {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+        }
+
+        .price-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .price-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Message box styling */
+        .message-box {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            min-width: 250px;
+            text-align: center;
+        }
+
+        /* Bus GIF Styling */
+        .bus-gif-container {
+            margin-bottom: 1.5rem; /* Space below the GIF */
+        }
+        .bus-gif-container img {
+            max-width: 150px; /* Control the size of the GIF */
+            height: auto;
+            border-radius: 0.75rem; /* Rounded corners for the image */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold mb-6 pb-2 border-b-2 border-white">Bus Ticket Payment Method</h1>
+
+        <!-- Input Page -->
+        <div id="inputPage" class="page active">
+            <!-- Animated Bus GIF -->
+            <div class="bus-gif-container">
+                <img id="animatedBusGif" src="https://cdn.dribbble.com/userupload/25497237/file/original-df06e3d87d2e0fc0a6a0c4945f0bc110.gif" alt="Animated Bus" class="mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/150x100/00CCFF/FFFFFF?text=GIF+Load+Error';">
             </div>
 
-            <div class="input-group">
-                <label for = "end place">End Place:</label>
-                <input type = "text" id = "end place"placeholder = "Enter your end place">
+            <div class="text-left mb-4">
+                <label for="startPlace" class="block text-lg font-medium mb-2">Start Place:</label>
+                <input type="text" id="startPlace" placeholder="e.g., Galle" class="w-full">
             </div>
 
-            <div class = "display amount">
-                Amount : <span id = "tecket amount">LKR 0.00</span>
+            <div class="text-left mb-6">
+                <label for="endPlace" class="block text-lg font-medium mb-2">End Place:</label>
+                <input type="text" id="endPlace" placeholder="e.g., Galle" class="w-full">
             </div>
 
-            <div class = "payment status" id = "payment status">
-                Awaiting payment...
-            </div>
+            <button id="calculatePriceBtn" class="btn btn-primary w-full text-xl mb-4">Calculate Price</button>
+            <button id="viewPriceListBtn" class="btn btn-secondary w-full text-xl">View Price List</button>
+        </div>
 
-            <div class = "next customer prompt" id = "next customer prompt">
-                "Who is next customer?"
+        <!-- Amount Display Page -->
+        <div id="amountDisplayPage" class="page">
+            <div class="text-xl font-semibold mb-6">
+                Calculated Amount: LKR <span id="displayAmount">0.00</span>
             </div>
-
-            <div class=""buttons>
-                <button class ="btn btn pay">Tap card to pay</button>
-                <button class = "btn btn next">Next customer</button>
+            <div class="flex justify-around space-x-4">
+                <button id="proceedToPaymentBtn" class="btn btn-primary flex-1 text-xl">Proceed to Payment</button>
+                <button id="backToInputBtn" class="btn btn-secondary flex-1 text-xl">Back to Input</button>
             </div>
         </div>
-    </body>
-    </html>
-</DOCTYPE>
+
+        <!-- Payment Page -->
+        <div id="paymentPage" class="page">
+            <div class="text-2xl font-bold mb-2">Awaiting payment...</div>
+            <div class="text-2xl font-bold mb-6">"Tap your card to complete the payment."</div>
+            <button id="tapCardBtn" class="btn btn-primary w-full text-xl">Tap card to pay</button>
+        </div>
+
+        <!-- Next Customer Ready Page -->
+        <div id="nextCustomerReadyPage" class="page">
+            <div class="text-2xl font-bold mb-2" id="paymentStatusMessage"></div>
+            <div class="text-2xl font-bold mb-6">"Who is next customer?"</div>
+            <button id="startNewTransactionBtn" class="btn btn-success w-full text-xl">Start New Transaction</button>
+        </div>
+
+        <!-- Price List Page -->
+        <div id="priceListPage" class="page">
+            <h2 class="text-2xl font-bold mb-4">Bus Ticket Price List</h2>
+            <div id="priceListTableContainer" class="overflow-x-auto">
+                <!-- Price list table will be generated here by JavaScript -->
+            </div>
+            <button id="backFromPriceListBtn" class="btn btn-secondary w-full text-xl mt-6">Back to Input</button>
+        </div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div id="messageBox" class="message-box">
+        <p id="messageText"></p>
+        <button id="messageBoxCloseBtn" class="btn btn-primary mt-4">OK</button>
+    </div>
+
+    <script>
+        // Get references to elements
+        const inputPage = document.getElementById('inputPage');
+        const amountDisplayPage = document.getElementById('amountDisplayPage');
+        const paymentPage = document.getElementById('paymentPage');
+        const nextCustomerReadyPage = document.getElementById('nextCustomerReadyPage');
+        const priceListPage = document.getElementById('priceListPage');
+
+        const calculatePriceBtn = document.getElementById('calculatePriceBtn');
+        const viewPriceListBtn = document.getElementById('viewPriceListBtn');
+        const proceedToPaymentBtn = document.getElementById('proceedToPaymentBtn');
+        const backToInputBtn = document.getElementById('backToInputBtn');
+        const tapCardBtn = document.getElementById('tapCardBtn');
+        const startNewTransactionBtn = document.getElementById('startNewTransactionBtn');
+        const backFromPriceListBtn = document.getElementById('backFromPriceListBtn');
+
+        const startPlaceInput = document.getElementById('startPlace');
+        const endPlaceInput = document.getElementById('endPlace');
+        const displayAmountSpan = document.getElementById('displayAmount');
+        const paymentStatusMessage = document.getElementById('paymentStatusMessage');
+        const priceListTableContainer = document.getElementById('priceListTableContainer');
+
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        const messageBoxCloseBtn = document.getElementById('messageBoxCloseBtn');
+
+        // Define the places for price calculation
+        const places = ['Galle', 'Colombo', 'Kandy', 'Jaffna', 'Matara', 'Anuradhapura', 'Trincomalee', 'Batticaloa'];
+        const basePrice = 100; // Base price
+        const pricePerUnitDistance = 50; // Price per "unit" of distance (index difference)
+
+        // Function to show custom message box (replaces alert)
+        function showMessageBox(message) {
+            messageText.textContent = message;
+            messageBox.style.display = 'block';
+        }
+
+        // Event listener for message box close button
+        messageBoxCloseBtn.addEventListener('click', () => {
+            messageBox.style.display = 'none';
+        });
+
+        // Function to calculate price based on place indices
+        function calculatePrice(start, end) {
+            const startIndex = places.indexOf(start.trim());
+            const endIndex = places.indexOf(end.trim());
+
+            if (startIndex === -1 || endIndex === -1) {
+                return 0.00; // Return 0 if places are not recognized
+            }
+
+            // Simple distance simulation based on array index difference
+            const distance = Math.abs(startIndex - endIndex) * 10; // Arbitrary distance unit
+            const calculatedPrice = basePrice + (distance * pricePerUnitDistance);
+
+            return calculatedPrice.toFixed(2); // Format to 2 decimal places
+        }
+
+        // Function to switch pages
+        function showPage(pageToShow) {
+            const allPages = [inputPage, amountDisplayPage, paymentPage, nextCustomerReadyPage, priceListPage];
+            allPages.forEach(page => page.classList.remove('active'));
+            pageToShow.classList.add('active');
+        }
+
+        // Event listener for Calculate Price button
+        calculatePriceBtn.addEventListener('click', () => {
+            const startPlace = startPlaceInput.value;
+            const endPlace = endPlaceInput.value;
+
+            if (startPlace.trim() === '' || endPlace.trim() === '') {
+                showMessageBox('Please enter both start and end places.');
+                return;
+            }
+            if (!places.includes(startPlace.trim()) || !places.includes(endPlace.trim())) {
+                showMessageBox('Please enter valid start and end places from the list (e.g., Galle, Colombo, Kandy, etc.).');
+                return;
+            }
+
+            const amount = calculatePrice(startPlace, endPlace);
+            displayAmountSpan.textContent = amount;
+            showPage(amountDisplayPage);
+        });
+
+        // Event listener for View Price List button
+        viewPriceListBtn.addEventListener('click', () => {
+            generatePriceListTable();
+            showPage(priceListPage);
+        });
+
+        // Event listener for Proceed to Payment button
+        proceedToPaymentBtn.addEventListener('click', () => {
+            showPage(paymentPage);
+        });
+
+        // Event listener for Back to Input button (from Amount Display Page)
+        backToInputBtn.addEventListener('click', () => {
+            resetApp();
+        });
+
+        // Event listener for Tap card to pay button
+        tapCardBtn.addEventListener('click', () => {
+            // Simulate payment processing
+            paymentStatusMessage.textContent = 'Payment successful!';
+            showPage(nextCustomerReadyPage);
+        });
+
+        // Event listener for Start New Transaction button
+        startNewTransactionBtn.addEventListener('click', () => {
+            resetApp();
+        });
+
+        // Event listener for Back from Price List button
+        backFromPriceListBtn.addEventListener('click', () => {
+            showPage(inputPage);
+        });
+
+        // Function to reset the app to its initial state
+        function resetApp() {
+            startPlaceInput.value = '';
+            endPlaceInput.value = '';
+            displayAmountSpan.textContent = '0.00';
+            paymentStatusMessage.textContent = ''; // Clear payment status
+            showPage(inputPage);
+        }
+
+        // Function to generate the price list table
+        function generatePriceListTable() {
+            let tableHTML = '<table class="price-table"><thead><tr><th>From</th><th>To</th><th>Price (LKR)</th></tr></thead><tbody>';
+
+            for (let i = 0; i < places.length; i++) {
+                for (let j = 0; j < places.length; j++) {
+                    if (i !== j) { // Don't show price from a place to itself
+                        const fromPlace = places[i];
+                        const toPlace = places[j];
+                        const price = calculatePrice(fromPlace, toPlace);
+                        tableHTML += `<tr><td>${fromPlace}</td><td>${toPlace}</td><td>${price}</td></tr>`;
+                    }
+                }
+            }
+            tableHTML += '</tbody></table>';
+            priceListTableContainer.innerHTML = tableHTML;
+        }
+
+        // Initial setup: ensure only the input page is active on load
+        document.addEventListener('DOMContentLoaded', () => {
+            resetApp(); // Resets and shows input page
+        });
+    </script>
+</body>
+</html>
